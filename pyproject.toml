@@ -1,0 +1,16 @@
+[tool.poetry]
+name = "async-fastapi-blog"
+version = "0.1.0"
+description = ""
+authors = ["Christopher <christophermachado222@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.12"
+fastapi = "*"
+uvicorn = {extras = ["standard"], version = "^0.32.0"}
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
