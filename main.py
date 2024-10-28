@@ -1,5 +1,6 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, status
 from datetime import UTC, datetime
+from pydantic import BaseModel
 
 app = FastAPI()
 
@@ -11,7 +12,21 @@ fake_db = [
     {"title": "Criando uma aplicação com Starllet", "date": datetime.now(UTC), 'published': False},
 ]
 
-@app.get("/posts")
+
+class Post(BaseModel):
+    title: str 
+    date: datetime = datetime.now(UTC)
+    published: bool = False
+
+
+@app.post("/posts/", status_code=status.HTTP_201_CREATED)
+def create_post(post: Post):
+    #dump para converter a representação dos dados no formato dicionario
+    fake_db.append(post.model_dump())
+    return post   
+
+
+@app.get("/posts/")
 def read_posts(published: bool, skip: int = 0, limit: int = len(fake_db)):
     return [post for post in fake_db[skip : skip + limit] if post['published'] is published]
 
