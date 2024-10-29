@@ -1,6 +1,7 @@
-from fastapi import FastAPI, status
+from fastapi import Response, Header, Cookie, FastAPI, status
 from datetime import UTC, datetime
 from pydantic import BaseModel
+from typing import Annotated
 
 app = FastAPI()
 
@@ -27,10 +28,16 @@ def create_post(post: Post):
 
 
 @app.get("/posts/")
-def read_posts(published: bool, limit: int, skip: int = 0):
-    #def read_posts(published: bool, skip: int = 0, limit: int = len(fake_db)):
-    #return [post for post in fake_db[skip : skip + limit] if post['published'] is published]
-    #TO DO - alterar aqui para exibir a quantidade correta de posts
+def read_posts(
+    response: Response, 
+    published: bool, 
+    limit: int, 
+    skip: int = 0, 
+    ads_id: Annotated[str | None, Cookie()] = None,
+    user_agent: Annotated[str | None, Header()] = None
+):
+    response.set_cookie(key="user", value="chris.c@gmail.com")
+    print(f"Cookie: {ads_id}")
     posts = []
     for post in fake_db:
         if len(posts) == limit:
